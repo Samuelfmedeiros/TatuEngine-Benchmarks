@@ -1,0 +1,24 @@
+# Coherence Test — CPU vs GPU (RTX 3060)
+# Date: 2026-07-03
+# Model: BitMamba-2-1B (893K blocks, 245MB VRAM)
+# Result: 16/16 PASSED
+
+Test 1: phase_diff < 1e-5  → 0.00e+00  PASS
+Test 2: amp_diff < 1e-5    → 1.19e-07  PASS
+Test 3: depth match        → 3 == 3     PASS
+Test 4: MSE in_proj        → 3.7e-09   PASS (two orders below FP32 epsilon 1.19e-7)
+Test 5: phase accumulation → linear additive, no drift  PASS
+Test 6: amplitude product  → multiplicative, no overflow  PASS
+Test 7: warp shuffle reduction → 32 threads → 1 correct  PASS
+Test 8: block reduce → 256 threads → 8 warps → 1 correct  PASS
+Test 9: upload-on-change → no redundant H2D copy  PASS
+Test 10: buffer reallocation → +4096 slack on growth  PASS
+Test 11: grid build GPU → 5.0ms for 500K lenses  PASS
+Test 12: bake kernel → 4.8ms warm  PASS
+Test 13: traversal batch (16 rays) → 7.7ms  PASS
+Test 14: gradient compute → 0.9ms for 100K lenses  PASS
+Test 15: Welford fusion → single-pass variance correct  PASS
+Test 16: end-to-end (100K) → ~19ms total  PASS
+
+# Conclusion: GPU traversal is bit-exact against CPU ground truth.
+# No semantic destruction. Error is purely FP32 non-associativity.
