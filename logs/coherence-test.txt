@@ -1,6 +1,6 @@
 # Coherence Test — CPU vs GPU (RTX 3060)
 # Date: 2026-07-03
-# Model: BitMamba-2-1B (893K blocks, 245MB VRAM)
+# Model: state-spaces/mamba2-1.3b depth-pruned (32 layers, 64 heads, vocab 50257)
 #   CORRECTION 2026-11-15: this label does not match the measured artifact.
 #   The checkpoint behind these figures has 64 heads (ssm.A_log shape (64,)) and
 #   4,978 distinct values in in_proj — it is not ternary in storage, and it is not

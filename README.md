@@ -140,12 +140,15 @@ first external baseline this repository has ever reported.
 
 | Metric | Value |
 |--------|-------|
-| Compression | 113.8× vs training checkpoint · 14.2× vs FP32 dense · 7.1× vs BF16 |
+| Compression (artifact on disk) | **5.68× vs FP32 dense · 2.84× vs BF16** — 614.45 MiB file against 3.66 GB / 1.83 GB |
+| Compression (ternary body only) | 14.2× vs FP32 · 7.1× vs BF16 — the smaller third of the file; **not** the artifact-level ratio |
+| Compression vs training checkpoint | 113.8× (checkpoint → artifact, weights only) |
 | MSE (in_proj) | 3.7e-9 (two orders below FP32 epsilon) |
 | Phase diff | 0.00e+00 (phase bit-exact) · amp 1.19e-07 = 1 FP32 eps |
 | Coherence | 16/16 tests passed (semantic, not bit-exact) |
 | Speedup | 69.4× (4.092s/tok CPU → 0.059s/tok GPU) |
-| Blocks | 893K (in_proj 530K, out_proj 262K, lm_head 100K) |
+| Blocks | 893K (in_proj 530K, out_proj 262K, lm_head 100K — lm_head is fp16 in the shipped file, so the ternary body is ~793K blocks = 217.8 MiB) |
+| **Quality of the quantized artifact** | **NOT MEASURED** — the loss/perplexity table below is the 120M model trained from scratch, not this 1.3B artifact. See "What's missing" |
 
 ---
 
@@ -417,11 +420,18 @@ checked here is the artifact size and the arithmetic, not the layout.
   30 documents per corpus is a demonstration, not a generalization claim.
 - Comparison against other models of similar size — not done. The only reference
   point in the log is uniform-random (`ln 50257` = 10.83 nats).
-- **No external inference-engine baseline.** There is no comparison against
-  bitnet.cpp, the ternary types in llama.cpp/ggml, or any other implementation.
-  The 69.4× compares the GPU path against this engine's own CPU path — it says
-  nothing about competitiveness. Reading it as a competitive claim is a
-  misreading the numbers invite, which is why it is stated here.
+- ~~**No external inference-engine baseline.**~~ **Corrected 2026-11-15:** the
+  head-to-head against `jserv/bitmamba.c` above IS an external baseline (same file,
+  same machine, same prompt). What remains absent is a comparison against
+  `bitnet.cpp` and the ternary types in llama.cpp/ggml — those are still not measured.
+- **The quantized 1.3B artifact has no quality measurement.** There is no loss, no
+  perplexity and no benchmark for `bitmamba_1b.bin`. The 16/16 coherence tests are
+  kernel-equivalence (CPU vs GPU), and the 3.7e-9 MSE is CPU-vs-GPU divergence — not
+  quantization error. What is known is that the kernel runs the same on both devices;
+  what is unknown is whether the model still predicts language. Quantizing a dense
+  checkpoint to ~2.25 bpw post-hoc, without QAT or imatrix, is exactly the case where
+  quality usually collapses. Until this is measured, every ratio above is a
+  file-size statement, not a working-engine statement.
 - **No per-stage GPU trace.** The CPU/GPU split is not shown to be optimal; it is
   only shown to be faster end-to-end than the scalar CPU path.
 - The 2.33 bits/token figure is task-dependent (legal domain); it is not a

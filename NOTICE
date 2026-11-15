@@ -1,0 +1,20 @@
+TatuEngine-Benchmarks
+Copyright (c) 2026 Samuel Andrade Medeiros
+
+This repository is distributed under the MIT License (see LICENSE).
+
+---------------------------------------------------------------------------
+Third-party attribution
+---------------------------------------------------------------------------
+
+The quantized artifact measured here derives from:
+
+  state-spaces/mamba2-1.3b
+  https://huggingface.co/state-spaces/mamba2-1.3b
+  License: Apache License 2.0
+
+The checkpoint was depth-pruned (48 -> 32 layers) and the vocabulary adjusted
+(50288 -> 50257) before quantization. The derived artifact is redistributed as
+aggregate metrics only; no weight files are published in this repository.
+
+Apache License 2.0: https://www.apache.org/licenses/LICENSE-2.0

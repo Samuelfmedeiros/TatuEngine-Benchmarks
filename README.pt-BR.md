@@ -141,7 +141,9 @@ baseline externo que este repositório reporta.
 
 | Métrica | Valor |
 |---------|-------|
-| Compressão | 113,8× vs checkpoint de treino · 14,2× vs FP32 denso · 7,1× vs BF16 |
+| Compressão (artefato em disco) | **5,68× vs FP32 denso · 2,84× vs BF16** — 614,45 MiB contra 3,66 GB / 1,83 GB |
+| Compressão (corpo ternário apenas) | 14,2× vs FP32 · 7,1× vs BF16 — o terço menor do arquivo; **não** é a razão do artefato |
+| Compressão vs checkpoint de treino | 113,8× (checkpoint → artefato, só pesos) |
 | MSE (in_proj) | 3.7e-9 (duas ordens abaixo do epsilon do FP32) |
 | Phase diff | 0,00e+00 (fase bit-exact) · amp 1,19e-07 = 1 épsilon FP32 |
 | Coerência | 16/16 testes passados (semântica, não bit-exact) |
