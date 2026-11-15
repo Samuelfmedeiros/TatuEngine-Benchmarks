@@ -1,0 +1,124 @@
+TatuEngine — Next-Token Prediction & Lossless Compression
+Measured 2026-11-13
+=================================================================
+
+ENVIRONMENT
+-----------
+Model:          120,133,920 parameters (120.1M), ternary/BitNet-style
+Config:         vocab 50257, d_model 768, n_layers 12, n_heads 12
+Eval device:    CPU (deterministic, no sampling for cross-entropy)
+Tokenizer:      GPT-2 BPE (50257)
+
+NEXT-TOKEN PREDICTION
+---------------------
+Method: teacher forcing over 512-token windows, cross-entropy against the
+true next token. Top-k accuracy from argmax of the logit distribution.
+No sampling, no temperature — every predicted token is the model's argmax.
+
+Corpus: legal PT-BR        (30 docs, 15,025 predicted tokens)
+checkpoint     loss      ppl     top-1    top-5    bits/tok
+884000         1.6361    5.14    68.7%    82.7%    2.36
+886000         1.6252    5.08    69.2%    82.8%    2.34
+888000         1.6141    5.02    69.3%    82.9%    2.33
+
+Corpus: general wiki PT    (30 docs, 15,330 predicted tokens)
+checkpoint     loss      ppl     top-1    top-5    bits/tok
+884000         2.9879    19.84   48.7%    67.0%    4.31
+886000         2.9891    19.87   48.6%    66.5%    4.31
+888000         2.9815    19.72   48.6%    67.1%    4.30
+
+Delta 884k -> 888k:
+  legal:  -0.0220 loss  (+0.6 pt top-1)
+  wiki:   -0.0064 loss  (-0.1 pt top-1)
+
+Interpretation: the legal corpus improves monotonically with steps; the general
+corpus is flat (delta inside run-to-run noise). The training mix is 68% legal
+PT-BR, so this is domain specialization, not general capability gain.
+
+GENERATION SAMPLES
+------------------
+Decoding: greedy (deterministic)
+
+  Prompt: "O contrato de prestação de serviços estabelece que"
+  Output: "... os direitos decorrentes da contratação de serviços de natureza
+           administrativa, que compõem o sistema e a instituição, são medidas
+           de toda e qualquer"
+
+  Prompt: "A Constituição Federal de 1988 determina que"
+  Output: "... a Constituição deve ser interpretada de forma mais favorável ao
+           Estado, ao lado de uma série de direitos fundamentais, sendo certo"
+
+Both are grammatically well-formed Portuguese and stay on-topic for the legal
+domain. Note the second sample is legally wrong in substance (the Constitution
+is normally read as favoring fundamental rights, not the State) — the model
+learned register and syntax, not legal reasoning.
+
+CAVEAT ON THESE NUMBERS — train/eval contamination, MEASURED
+------------------------------------------------------------
+The evaluation corpora were drawn from the same document pools used for
+pretraining, not from a held-out split. That is not an assumption — it was
+measured.
+
+Method: take the first 32 tokens of a document as its signature, then search for
+that exact token sequence inside the training tensor (train_ids.pt,
+2,396,160,000 tokens). A hit means the document is verbatim in the training data.
+
+Result:
+  legal PT-BR:  10 of 12 documents found in training  (83%), most 21 times
+  wiki PT:      11 of 12 documents found in training  (92%), twice each
+
+  SUPERSEDED (2026-11-14): this 12-document sample took documents from the FRONT
+  of the parquet order, which is systematically more contaminated than the corpus
+  as a whole. Random row-group sampling across all parquets gives:
+    legal PT-BR:  129 of 200 documents in training  (64%)
+    wiki PT:       53 of 120 documents in training  (44%)
+  The 83%/92% figures above overstate contamination by ~19 and ~48 percentage
+  points respectively. See README held-out section and CHANGELOG 2026-11-14.
+
+Consequence: the loss figures above are an **in-distribution** measurement, not
+a generalization measurement. Treating 1.6141 and 2.9815 as generalization would
+be wrong — the model is being scored on text it has already seen.
+
+What the numbers still support: relative comparison between checkpoints on the
+same distribution (884K improves over 888K on legal, flat on wiki). What they do
+not support: any absolute claim about unseen-text quality.
+
+A clean run needs a held-out split — documents carved out of the parquet
+collections before tokenization, hashed and excluded from train_ids.pt. That is
+not what was measured here.
+
+
+
+LOSSLESS COMPRESSION (.tlz)
+---------------------------
+Corpora: real text (wiki PT, 645,527 B) and real source code (484,599 B).
+Baselines: xz -9e, zstd -19 (both at maximum settings).
+
+Wiki PT text
+  original     645,527 B
+  xz -9e       188,080 B   3.432x
+  zstd -19     191,508 B   3.371x
+  .tlz         191,785 B   3.366x
+  vs xz        +1.97% larger
+
+Source code
+  original     484,599 B
+  xz -9e        90,564 B   5.351x
+  zstd -19      92,774 B   5.223x
+  .tlz          94,173 B   5.146x
+  vs xz        +3.99% larger
+
+Roundtrip: md5 of decompressed output identical to input on both corpora.
+
+Progress within the session:
+  text gap vs xz:    6.32%  ->  1.97%
+  code gap vs xz:    7.28%  ->  3.99%
+
+Where the remaining gap sits (text corpus, 8.3 bits/token total):
+  flag  9.4%  |  length 11.8%  |  distance 44.1%  |  literals 34.7%
+  distance breakdown per new-distance match: slot 2.24 + log2 slot 4.47 + low bits 8.91
+
+Methodology correction: an earlier measurement reported 14.2% gap on text. That
+figure came from a synthetic corpus built by repeating documents — the match
+finder located multi-kilobyte matches that do not exist in real prose. All
+numbers above use real corpora.
