@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="TatuEngine — Ternary inference, measured.">
+  <defs>
+    <radialGradient id="aurora" cx="82%" cy="6%" r="78%">
+      <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.30"/>
+      <stop offset="55%" stop-color="#0d9488" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#0a1412" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e1e4e8"/>
+      <stop offset="55%" stop-color="#5eead4"/>
+      <stop offset="100%" stop-color="#14b8a6"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#14b8a6" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#2dd4bf" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#14b8a6" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="wave" width="180" height="96" patternUnits="userSpaceOnUse">
+      <path d="M0 74 Q22 56 45 74 T90 74 T135 74 T180 74" fill="none" stroke="#14b8a6" stroke-opacity="0.16" stroke-width="1.2"/>
+      <path d="M0 82 Q22 64 45 82 T90 82 T135 82 T180 82" fill="none" stroke="#14b8a6" stroke-opacity="0.09" stroke-width="1"/>
+      <path d="M0 66 Q22 48 45 66 T90 66 T135 66 T180 66" fill="none" stroke="#14b8a6" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0a1412"/>
+  <rect width="1200" height="630" fill="url(#aurora)"/>
+  <rect y="360" width="1200" height="270" fill="url(#wave)" opacity="0.8"/>
+  <rect x="72" y="64" width="1056" height="502" rx="24" fill="none" stroke="#14b8a6" stroke-opacity="0.45" stroke-width="1.5"/>
+  <rect x="72" y="64" width="1056" height="2" fill="url(#edge)"/>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="112" y="132" fill="#2dd4bf" font-size="17" letter-spacing="5">SAMUEL MEDEIROS · OPEN RESEARCH · 2026</text>
+  </g>
+
+  <g font-family="Inter, Helvetica, Arial, sans-serif" font-weight="800">
+    <text x="108" y="248" font-size="76" fill="url(#ink)" letter-spacing="-3">Ternary inference,</text>
+    <text x="108" y="336" font-size="76" fill="#2dd4bf" letter-spacing="-3">measured.</text>
+  </g>
+
+  <g font-family="Inter, Helvetica, Arial, sans-serif">
+    <text x="112" y="392" fill="#8b949e" font-size="24">Benchmarks and coherence proofs for the TatuEngine engine.</text>
+    <text x="112" y="426" fill="#8b949e" font-size="24">Numbers with sources. Caveats with teeth.</text>
+  </g>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" text-anchor="middle">
+    <rect x="108" y="470" width="224" height="66" rx="12" fill="#101d1a" stroke="#21262d"/>
+    <text x="220" y="500" fill="#5eead4" font-size="27" font-weight="700">69.4×</text>
+    <text x="220" y="521" fill="#8b949e" font-size="12">CPU → GPU</text>
+
+    <rect x="348" y="470" width="224" height="66" rx="12" fill="#101d1a" stroke="#21262d"/>
+    <text x="460" y="500" fill="#5eead4" font-size="27" font-weight="700">45.4×</text>
+    <text x="460" y="521" fill="#8b949e" font-size="12">vs checkpoint</text>
+
+    <rect x="588" y="470" width="224" height="66" rx="12" fill="#101d1a" stroke="#21262d"/>
+    <text x="700" y="500" fill="#5eead4" font-size="27" font-weight="700">16/16</text>
+    <text x="700" y="521" fill="#8b949e" font-size="12">coherence tests</text>
+
+    <rect x="828" y="470" width="224" height="66" rx="12" fill="#101d1a" stroke="#21262d"/>
+    <text x="940" y="500" fill="#5eead4" font-size="27" font-weight="700">30.5%</text>
+    <text x="940" y="521" fill="#8b949e" font-size="12">held-out gap</text>
+  </g>
+</svg>
