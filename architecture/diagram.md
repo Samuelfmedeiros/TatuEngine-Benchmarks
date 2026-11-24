@@ -5,6 +5,21 @@ structures, the kernel implementations and the codec internals are proprietary a
 are not documented here. What follows is the shape of the pipeline and the measured
 properties of the result, not the mechanism.
 
+```mermaid
+flowchart LR
+    A["Training checkpoint<br/>27.26 GiB"] -->|"45.4×"| M["Encoded artifact"]
+    B["FP32 dense inference<br/>3.85 GiB"] -->|"6.41×"| M
+    C["BF16 dense inference<br/>1.92 GiB"] -->|"3.21×"| M
+    M --> R["Measured results<br/>coherence · latency · loss"]
+    R --> Q["Caveat<br/>baseline always named"]
+    classDef base fill:#13131a,stroke:#14b8a6,color:#e1e4e8;
+    classDef mid fill:#0a1412,stroke:#2dd4bf,color:#e1e4e8;
+    classDef note fill:#1a1408,stroke:#fbbf24,color:#e1e4e8;
+    class A,B,C base;
+    class M,R mid;
+    class Q note;
+```
+
 ## Pipeline shape
 
 ```
@@ -14,6 +29,19 @@ tokens (CPU)
         normalisation  →  projection (GPU)  →  convolution + activation (CPU)
         →  state-space step (CPU)  →  projection (GPU)  →  residual (CPU)
     → final normalisation  →  output projection  →  logits
+```
+
+```mermaid
+flowchart LR
+    T["tokens"] --> E["embedding"]
+    E --> N["norm"]
+    N --> P["projection"]
+    P --> C["convolution + state"]
+    C --> R["residual"]
+    R --> F["final norm + output"]
+    F --> O["logits"]
+    classDef step fill:#0a1412,stroke:#14b8a6,color:#e1e4e8;
+    class T,E,N,P,C,R,F,O step;
 ```
 
 The split between CPU and GPU stages is measured, not assumed: `nvidia-smi dmon`

@@ -1,8 +1,24 @@
-# 🧠 TatuEngine-Benchmarks — Samuel Medeiros
+<div align="center">
 
-Benchmarks and coherence proofs for the TatuEngine ternary inference engine.
+<table width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="background:#0a1412; padding:42px 20px; border:1px solid #14b8a6; border-radius:16px;">
+<p style="font-family:monospace; color:#14b8a6; letter-spacing:3px; font-size:11px; margin:0 0 14px;">SAMUEL MEDEIROS · OPEN RESEARCH · 2026</p>
+<h1 style="color:#e1e4e8; font-size:38px; margin:0 0 10px; letter-spacing:-1px;">Ternary inference, <span style="color:#2dd4bf;">measured.</span></h1>
+<p style="color:#8b949e; margin:0 0 22px; font-size:15px;">Benchmarks and coherence proofs for the TatuEngine ternary inference engine.<br>Numbers with sources. Caveats with teeth.</p>
+<table cellpadding="14"><tr>
+<td align="center" style="border:1px solid #21262d; border-radius:12px;"><b style="color:#2dd4bf; font-family:monospace; font-size:21px;">69.4×</b><br><small style="color:#8b949e;">CPU → GPU</small></td>
+<td align="center" style="border:1px solid #21262d; border-radius:12px;"><b style="color:#2dd4bf; font-family:monospace; font-size:21px;">45.4×</b><br><small style="color:#8b949e;">vs checkpoint</small></td>
+<td align="center" style="border:1px solid #21262d; border-radius:12px;"><b style="color:#2dd4bf; font-family:monospace; font-size:21px;">16/16</b><br><small style="color:#8b949e;">coherence</small></td>
+<td align="center" style="border:1px solid #21262d; border-radius:12px;"><b style="color:#2dd4bf; font-family:monospace; font-size:21px;">30.5%</b><br><small style="color:#8b949e;">held-out gap</small></td>
+</tr></table>
+</td></tr></table>
+
+![license](https://img.shields.io/badge/license-MIT-14b8a6) ![hardware](https://img.shields.io/badge/hardware-RTX%203060-14b8a6) ![checkpoint](https://img.shields.io/badge/checkpoint-120M-14b8a6) ![coherence](https://img.shields.io/badge/coherence-16%2F16-14b8a6)
+
+</div>
 
 **Live:** https://github.com/Samuelfmedeiros/TatuEngine-Benchmarks
+
+**Landing page:** [index.html](index.html) — cosmic dark, bilingual, mobile-first (GitHub Pages-ready).
 
 > 🌐 **English** · [🇧🇷 Português](README.pt-BR.md)
 
