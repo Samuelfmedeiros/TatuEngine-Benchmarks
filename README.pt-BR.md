@@ -22,7 +22,7 @@
 
 **Analytics:** a landing envia um beacon anônimo de visita/clique ao contador do ecossistema (sem cookie, sem identificador; DNT/GPC é respeitado). Nenhum dado é vendido ou compartilhado.
 
-**Métricas (7 dias):** [visitas agregadas](https://skills.seu.pet/api/hits?site=tatu-benchmarks&days=7).
+**Métricas:** contagens agregadas disponíveis ao mantenedor por endpoint de leitura autenticado (sem PII, bots fora).
 
 > 🌐 [🇺🇸 English](README.md) · **Português**
 

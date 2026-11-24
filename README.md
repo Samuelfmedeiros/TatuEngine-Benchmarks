@@ -22,7 +22,7 @@
 
 **Analytics:** the landing sends an anonymous visit/click beacon to the ecosystem hit counter (no cookie, no identifier; DNT/GPC is respected). No data is sold or shared.
 
-**Metrics (7 days):** [aggregate hits](https://skills.seu.pet/api/hits?site=tatu-benchmarks&days=7).
+**Metrics:** aggregate hit counts are available to the maintainer through an authenticated read endpoint (no PII, bots excluded).
 
 > 🌐 **English** · [🇧🇷 Português](README.pt-BR.md)
 
