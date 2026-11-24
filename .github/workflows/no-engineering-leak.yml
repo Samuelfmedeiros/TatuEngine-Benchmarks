@@ -1,0 +1,17 @@
+name: No engineering leak
+
+# O repo publica amostra e benchmark — nunca kernel, layout de struct ou roadmap.
+# Gate automático da ordem do Samuel (15/11/2026).
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verificar marcadores de engenharia
+        run: bash scripts/check-no-engineering-leak.sh
