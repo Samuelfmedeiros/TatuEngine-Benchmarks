@@ -10,6 +10,11 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+  # Objeto com marcador nao some do GitHub por force-push: sem push ninguem
+  # rechecaria. Semanal (segunda 06:00 UTC) falha visivel no Actions.
+  # So vale no branch default — passa a rodar depois do merge.
+  schedule:
+    - cron: '0 6 * * 1'
 
 jobs:
   check:
