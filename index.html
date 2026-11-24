@@ -221,7 +221,7 @@ footer{margin-top:90px;border-top:1px solid var(--border);padding:36px 0 54px}
   <p class="lede" data-en="Benchmarks and coherence proofs for the TatuEngine ternary inference engine. Numbers with sources, caveats with teeth — nothing here asks you to take a claim on faith." data-pt="Benchmarks e provas de coerência do motor de inferência ternária TatuEngine. Números com fonte, ressalvas com dente — nada aqui pede que você aceite uma afirmação sem prova.">Benchmarks and coherence proofs for the TatuEngine ternary inference engine. Numbers with sources, caveats with teeth — nothing here asks you to take a claim on faith.</p>
   <div class="cta">
     <a class="btn btn-p" href="#results"><span data-en="See the numbers" data-pt="Ver os números">See the numbers</span> →</a>
-    <a class="btn btn-g" href="README.md" data-en="Read the paper" data-pt="Ler o artigo">Read the paper</a>
+    <a class="btn btn-g" href="README.md" data-umami-event="paper" data-en="Read the paper" data-pt="Ler o artigo">Read the paper</a>
   </div>
   <div class="stats">
     <div class="stat"><b>69.4×</b><span data-en="CPU → GPU speedup" data-pt="Aceleração CPU → GPU">CPU → GPU speedup</span></div>
@@ -297,7 +297,7 @@ footer{margin-top:90px;border-top:1px solid var(--border);padding:36px 0 54px}
     <div class="card reveal"><span class="tag">architecture/</span><h3 data-en="High-level diagram" data-pt="Diagrama de alto nível">High-level diagram</h3>
       <p data-en="Block layout and hybrid pipeline at the level the paper describes — nothing private." data-pt="Layout de blocos e pipeline híbrido no nível descrito pelo artigo — nada privado.">Block layout and hybrid pipeline at the level the paper describes — nothing private.</p></div>
     <div class="card reveal"><span class="tag">docs</span><h3 data-en="Two papers, one truth" data-pt="Dois artigos, uma verdade">Two papers, one truth</h3>
-      <p><a href="README.md" style="color:var(--accent)">README.md</a> · <a href="README.pt-BR.md" style="color:var(--accent)">README.pt-BR.md</a> · <a href="CHANGELOG.md" style="color:var(--accent)">CHANGELOG.md</a></p></div>
+      <p><a href="README.md" data-umami-event="paper" style="color:var(--accent)">README.md</a> · <a href="README.pt-BR.md" data-umami-event="paper-pt" style="color:var(--accent)">README.pt-BR.md</a> · <a href="CHANGELOG.md" data-umami-event="changelog" style="color:var(--accent)">CHANGELOG.md</a></p></div>
   </div>
 </section>
 </div>
@@ -306,10 +306,10 @@ footer{margin-top:90px;border-top:1px solid var(--border);padding:36px 0 54px}
 <footer><div class="wrap foot">
   <small>© 2026 Samuel Medeiros · <span data-en="Measure first. Claim later." data-pt="Meça primeiro. Afirme depois.">Measure first. Claim later.</span></small>
   <nav>
-    <a href="https://lifelog.seu.pet" target="_blank" rel="noopener">LifeLog</a>
-    <a href="https://skills.seu.pet/p/o-agente-que-nao-mente" target="_blank" rel="noopener" data-en="E-book" data-pt="E-book">E-book</a>
-    <a href="https://github.com/Samuelfmedeiros/TatuEngine-Benchmarks" target="_blank" rel="noopener">GitHub</a>
-    <a href="README.pt-BR.md">🇧🇷 PT-BR</a>
+    <a href="https://lifelog.seu.pet" data-umami-event="lifelog" target="_blank" rel="noopener">LifeLog</a>
+    <a href="https://skills.seu.pet/p/o-agente-que-nao-mente" data-umami-event="ebook" target="_blank" rel="noopener" data-en="E-book" data-pt="E-book">E-book</a>
+    <a href="https://github.com/Samuelfmedeiros/TatuEngine-Benchmarks" data-umami-event="github" target="_blank" rel="noopener">GitHub</a>
+    <a href="README.pt-BR.md" data-umami-event="lang-pt">🇧🇷 PT-BR</a>
   </nav>
 </div></footer>
 
@@ -334,6 +334,25 @@ footer{margin-top:90px;border-top:1px solid var(--border);padding:36px 0 54px}
       if(lang==='pt') el.innerHTML=el.dataset.pt; else el.innerHTML=el.dataset.en;
     });
     document.documentElement.lang=lang==='pt'?'pt-BR':'en';this.textContent=lang==='en'?'PT':'EN';
+  });
+
+  // ── Medição de chegada e cliques ──────────────────────────────────
+  // Beacon sem cookie/IP enviado ao caixa da loja (mesmo endpoint que o
+  // Portfólio usa). `no-cors` + text/plain = request simples, sem preflight.
+  // Respeita DNT/GPC: quem pediu privacidade não é contado.
+  var HIT='https://skills.seu.pet/api/hit';
+  function semRastreio(){var n=navigator;return n.doNotTrack==='1'||n.doNotTrack==='yes'||n.globalPrivacyControl===true;}
+  function hit(caminho){
+    if(semRastreio())return;
+    try{fetch(HIT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({site:'tatu-benchmarks',path:caminho,ref:document.referrer||''})});}catch(e){}
+  }
+  hit(location.pathname||'/');
+  document.querySelectorAll('a[href^="http"], a[href$=".md"]').forEach(function(a){
+    a.addEventListener('click',function(){
+      var rotulo=a.getAttribute('data-umami-event')||a.textContent.trim().slice(0,40)||'link';
+      hit('/out/'+rotulo.replace(/[^a-z0-9_-]+/gi,'-').toLowerCase());
+    });
   });
 
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}})},{threshold:.12});
