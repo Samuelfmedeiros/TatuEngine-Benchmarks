@@ -18,7 +18,7 @@
 
 **Live:** https://github.com/Samuelfmedeiros/TatuEngine-Benchmarks
 
-**Landing page:** [index.html](index.html) — cosmic dark, bilíngue, mobile-first (pronta para GitHub Pages).
+**Landing page:** [samuelfmedeiros.github.io/TatuEngine-Benchmarks](https://samuelfmedeiros.github.io/TatuEngine-Benchmarks/) — cosmic dark, bilíngue, mobile-first.
 
 > 🌐 [🇺🇸 English](README.md) · **Português**
 
