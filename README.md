@@ -20,6 +20,8 @@
 
 **Landing page:** [samuelfmedeiros.github.io/TatuEngine-Benchmarks](https://samuelfmedeiros.github.io/TatuEngine-Benchmarks/) — cosmic dark, bilingual, mobile-first.
 
+**Analytics:** the landing sends an anonymous visit/click beacon to the ecosystem hit counter (no cookie, no identifier; DNT/GPC is respected). No data is sold or shared.
+
 > 🌐 **English** · [🇧🇷 Português](README.pt-BR.md)
 
 ---
