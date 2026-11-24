@@ -2,16 +2,26 @@ name: No engineering leak
 
 # O repo publica amostra e benchmark — nunca kernel, layout de struct ou roadmap.
 # Gate automático da ordem do Samuel (15/11/2026).
+# fetch-depth: 0 é OBRIGATÓRIO: o gate varre o histórico (o vazamento de 15/11
+# veio de commits e force-push não apaga objeto do GitHub). Com checkout raso o
+# gate sai rc=2 (NAO VERIFICAVEL) em vez de verde falso.
 
 on:
   push:
   pull_request:
   workflow_dispatch:
+  # Objeto com marcador nao some do GitHub por force-push: sem push ninguem
+  # rechecaria. Semanal (segunda 06:00 UTC) falha visivel no Actions.
+  # So vale no branch default — passa a rodar depois do merge.
+  schedule:
+    - cron: '0 6 * * 1'
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verificar marcadores de engenharia
+        with:
+          fetch-depth: 0
+      - name: Verificar marcadores de engenharia (working tree + histórico)
         run: bash scripts/check-no-engineering-leak.sh
